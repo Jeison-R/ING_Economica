@@ -1,7 +1,7 @@
 function PrintNavBar() {
-  let navBar = document.getElementById("navbar");
+  let navBar = document.getElementById('navbar')
   if (navBar) {
-    navBar.innerHTML = "";
+    navBar.innerHTML = ''
     navBar.innerHTML = `<div class="container-fluid">
     <a class="navbar-brand" href="#">YUJEKEAL</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -67,9 +67,23 @@ function PrintNavBar() {
             </li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page"
-            href="/FRONTEND/Paginas/amortizacion/amortizacion.html">Amortización</a>
+
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Amortización
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" href="/FRONTEND/Paginas/amortizacion/Frances.html">Francés</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/FRONTEND/Paginas/amortizacion/Americano.html">Americano</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/FRONTEND/Paginas/amortizacion/Aleman.html">Alemán</a>
+            </li>
+          </ul>
         </li>
 
         <li class="nav-item dropdown">
@@ -87,7 +101,7 @@ function PrintNavBar() {
           </ul>
         </li>
       </ul>
-    </div>`;
+    </div>`
   }
 }
-export default { PrintNavBar };
+export default { PrintNavBar }
