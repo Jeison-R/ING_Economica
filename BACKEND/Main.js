@@ -150,3 +150,123 @@ function calcularAmortizacion() {
     amortizationTable.appendChild(row)
   }
 }
+
+// Frances
+
+// Obtener los elementos del formulario y la tabla de amortización
+const form = document.getElementById('formValorPresenteSimple')
+const table = document.getElementById('amortizationTable')
+
+// Agregar un evento de escucha al formulario
+form.addEventListener('submit', calcularAmortizacion)
+
+function calcularAmortizacion(event) {
+  event.preventDefault()
+
+  // Obtener los valores ingresados por el usuario
+  const montoPrestamo = parseFloat(
+    document.getElementById('inputMontoPrestamo').value
+  )
+  const tasaInteres = parseFloat(
+    document.getElementById('inputTasaInteres').value
+  )
+  const unidadInteres = parseInt(
+    document.getElementById('inputGroupSelectUnidadInteres').value
+  )
+  const numeroPeriodos = parseInt(
+    document.getElementById('inputNumeroPeriodos').value
+  )
+  const unidadPeriodos = parseInt(
+    document.getElementById('inputGroupSelectUnidadPeriodos').value
+  )
+
+  // Calcular el factor de amortización
+  const factorAmortizacion = calcularFactorAmortizacion(
+    tasaInteres,
+    unidadInteres,
+    numeroPeriodos,
+    unidadPeriodos
+  )
+
+  // Calcular la tabla de amortización
+  const tablaAmortizacion = calcularTablaAmortizacion(
+    montoPrestamo,
+    factorAmortizacion
+  )
+
+  // Mostrar la tabla de amortización en HTML
+  mostrarTablaAmortizacion(tablaAmortizacion)
+}
+
+function calcularFactorAmortizacion(
+  tasaInteres,
+  unidadInteres,
+  numeroPeriodos,
+  unidadPeriodos
+) {
+  const tasaPeriodo = tasaInteres / (unidadInteres * unidadPeriodos)
+  const factor = Math.pow(1 + tasaPeriodo, numeroPeriodos)
+  const factorAmortizacion = (tasaPeriodo * factor) / (factor - 1)
+  return factorAmortizacion
+}
+
+function calcularTablaAmortizacion(montoPrestamo, factorAmortizacion) {
+  const tabla = []
+
+  let saldoPendiente = montoPrestamo
+  let cuota = saldoPendiente * factorAmortizacion
+  let intereses = saldoPendiente * factorAmortizacion
+  let amortizacion = cuota - intereses
+
+  for (let i = 1; i <= numeroPeriodos; i++) {
+    tabla.push({
+      periodo: i,
+      cuota: cuota.toFixed(2),
+      intereses: intereses.toFixed(2),
+      amortizacion: amortizacion.toFixed(2),
+      saldoPendiente: saldoPendiente.toFixed(2),
+    })
+
+    saldoPendiente -= amortizacion
+    cuota = saldoPendiente * factorAmortizacion
+    intereses = saldoPendiente * factorAmortizacion
+    amortizacion = cuota - intereses
+  }
+
+  return tabla
+}
+
+function mostrarTablaAmortizacion(tablaAmortizacion) {
+  // Limpiar la tabla existente
+  table.innerHTML = ''
+
+  // Crear encabezados de columna
+  const thead = table.createTHead()
+  const row = thead.insertRow()
+  const headers = [
+    'Periodo',
+    'Cuota',
+    'Intereses',
+    'Amortización',
+    'Saldo Pendiente',
+  ]
+
+  for (const header of headers) {
+    const th = document.createElement('th')
+    th.innerText = header
+    row.appendChild(th)
+  }
+
+  // Agregar filas de datos
+  const tbody = table.createTBody()
+
+  for (const fila of tablaAmortizacion) {
+    const row = tbody.insertRow()
+    const valores = Object.values(fila)
+
+    for (const valor of valores) {
+      const cell = row.insertCell()
+      cell.innerText = valor
+    }
+  }
+}
